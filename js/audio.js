@@ -3,7 +3,9 @@ window.addEventListener('load', init, false);
 
 var BUFFERS = {};
 var BUFFERS_TO_LOAD = {
-    'drum1': 'sound/CL516TAPE1/T09BD17IPS.wav'
+    'kick': 'sound/CL516TAPE1/T09BD17IPS.wav',
+    'chh': 'sound/CL516TAPE1/T09CHATD0.wav',
+    'snare': 'sound/snare.mp3'
 };
 
 function init() {
@@ -40,34 +42,59 @@ function loadBuffers() {
 var RhythmSample = {};
 
 RhythmSample.play = function() {
-    function playSound(buffer, time) {
+
+    if (!context.createGain) 
+        context.createGain = context.createGainNode;
+    this.gainNode = context.createGain();
+    this.gainNode.gain.value = 0.4;
+    //var source = context.createBufferSource();
+    //
+    //
+    var filter = context.createBiquadFilter();
+    filter.type = 0;
+    filter.frequency.value = 440;
+
+    function playSound(buffer, timeOn, length) {
         var source = context.createBufferSource();
         source.buffer = buffer;
+        console.debug(source);
+        //source.connect(context.destination);
+        //console.debug(RhythmSample.gainNode);
         source.connect(context.destination);
+        //RhythmSample.gainNode.connect(context.destination);
+        //console.debug(RhythmSample.gainNode);
         if (!source.start) 
             source.start = source.noteOn;
-        source.start(time);
-        //TODO playsound should have optional "stop" parameter
-        source.stop(time + 0.5);
+        source.start(timeOn);
+        if (length) source.stop(timeOn + length);
 
     }
-        var kick = BUFFERS.drum1;
+        var kick = BUFFERS.kick;
+        var kickLength = 0.5;
+        var hihat  = BUFFERS.chh;
+        var hihatLength = 0.5;
+        var snare = BUFFERS.snare;
+        var snareLength = 1;
 
         var startTime = context.currentTime + 0.100;
         var tempo = 80;
         var eighthNoteTime = (60 / tempo) / 2;
+        var sixteenthNoteTime = (60 / tempo) / 4;
 
     for (var bar = 0; bar < 2; bar ++) {
         var time = startTime + bar * 8 * eighthNoteTime;
         console.log('playing');
-        playSound(kick, time);
-        playSound(kick, time + 4 * eighthNoteTime);
+
+        playSound(kick, time, kickLength);
+        playSound(kick, time + 4 * eighthNoteTime, kickLength);
+
+        playSound(snare, time + 2 * eighthNoteTime, snareLength);
+        playSound(snare, time + 6 * eighthNoteTime, snareLength);
+
+
+        for (var i = 0; i < 16; ++i) {
+            playSound(hihat, time + i * sixteenthNoteTime, hihatLength);
+        }
     }
 
 };
-
-
-
-
-
-
