@@ -2,21 +2,37 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bufferLoader.js"></script>
     <script type="text/javascript" src="js/audio.js"></script>
     <script type="text/javascript" src="js/whitenoise.js"></script>
+    <script type="text/javascript" src="js/pianoRoll.js"></script>
     <title>Web Audio</title>
+
+    <style type="text/css" media="all">
+      #piano-roll {
+        width: 1800;
+        height: 500;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      
+    </style>
     
   </head>
   <body>
       <button id="play-drums" >PLAY</button>
       <button id="play-gun" >PLAY</button>
+      <div id="piano-roll"></div>
     
   </body>
 
   <script>
       $('#play-drums').click(RhythmSample.play);
+      pianoRoll('#piano-roll', true);
+
+
 
 </script>
 </html>
