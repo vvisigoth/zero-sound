@@ -1,50 +1,79 @@
-function pianoRoll(id, square) {
+function PianoRoll(id, square) {
 
-    var width = $(id).width();
-    var height = $(id).height();
+    this.id = id;
 
-    var calData = noteData(width, height, square);
+    this.width = $(id).width();
+    this.height = $(id).height();
+    this.calData = noteData(this.width, this.height, square);
 
-    function gridInit() {
-        var grid = d3.select(id)
-            .append('svg')
-            .attr('width', width)
-            .attr('height', height)
-            .attr('class', 'piano-roll');
-        return grid
-    }
+}
 
-    grid = gridInit();
+PianoRoll.prototype.gridInit = function() {
+    this.grid = d3.select(this.id)
+        .append('svg')
+        .attr('class', 'piano-roll');
+}
 
-    function cellInit() {
+PianoRoll.prototype.cellInit = function() {
 
-        var row = grid.selectAll('.row')
-                    .data(calData)
-                    .enter().append('svg:g')
-                    .attr('class', 'row');
+    var that = this;
 
-        var col = row.selectAll('.cell')
-                .data(function(d) { return d;})
-                .enter().append('svg:rect')
-                .attr('class', 'cell')
-                .attr('x', function(d) { return d.x; })
-                .attr('y', function(d) { return d.y; })
-                .attr('width', function(d) { return d.width; })
-                .attr('height', function(d) { return d.height; })
-                .on('click', function() {
-                    console.log(d3.select(this));
-                })
-                .style('fill', function(d) {
-                    if (d.value) {
-                        return '#0F0';
-                    } else {
-                        return '#FFF';
-                    }
-                })
-                .style('stroke', '#555');
-    }
+    console.log(this.width, this.height);
 
+    var row = this.grid.selectAll('.row')
+                .data(this.calData)
+                .enter().append('svg:g')
+                .attr('width', this.width)
+                .attr('height', this.height)
+                .attr('class', 'row');
 
+    var col = row.selectAll('.cell')
+            .data(function(d) { return d;})
+            .enter().append('svg:rect')
+            .attr('class', 'cell')
+            .attr('x', function(d) { return d.x; })
+            .attr('y', function(d) { return d.y; })
+            .attr('width', function(d) { return d.width; })
+            .attr('height', function(d) { return d.height; })
+            .on('click', function(e) {
+                if (e.value) {
+                    e.value = 0;
+                    that.refresh();
+                } else {
+                    e.value = 1;
+                    that.refresh();
+                }
+            })
+            .style('fill', function(d) {
+                if (d.value) {
+                    return '#0F0';
+                } else {
+                    return '#FFF';
+                }
+            })
+            .style('stroke', '#555');
+}
+
+PianoRoll.prototype.refresh = function() {
+    var row = this.grid.selectAll('.row')
+                .data(this.calData)
+
+    var col = row.selectAll('.cell')
+            .data(function(d) { return d;})
+            .style('fill', function(d) {
+                if (d.value) {
+                    console.log('color dat');
+                    return '#0F0';
+                } else {
+                    return '#FFF';
+                }
+            })
+            .style('stroke', '#555');
+}
+
+PianoRoll.prototype.init = function() {
+    this.gridInit();
+    this.cellInit();
 }
 
 function noteData(gridWidth, gridHeight, square) {
@@ -64,7 +93,6 @@ function noteData(gridWidth, gridHeight, square) {
             index_a < 8; index_a++) {
         data.push(new Array());
         for (var index_b = 0; index_b < 32; index_b++) {
-            //newValue = Math.round(Math.random());
             newValue = 0;
             data[index_a].push({
                 time: index_b,
@@ -73,6 +101,8 @@ function noteData(gridWidth, gridHeight, square) {
                 height: gridItemHeight,
                 x: xpos,
                 y: ypos,
+                gridX: index_b,
+                gridY: index_a,
                 count: count
             });
 

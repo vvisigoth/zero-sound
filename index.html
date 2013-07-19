@@ -12,12 +12,12 @@
 
     <style type="text/css" media="all">
       #piano-roll {
-        width: 1800;
-        height: 500;
+        width: 900;
+        height: 400;
         margin-right: auto;
         margin-left: auto;
+        padding: 0;
       }
-      
     </style>
     
   </head>
@@ -29,8 +29,11 @@
   </body>
 
   <script>
-      $('#play-drums').click(RhythmSample.play);
-      pianoRoll('#piano-roll', true);
+    $('#play-drums').click(RhythmSample.play);
+    //pianoRoll('#piano-roll', true);
+    var pianoRoll = new PianoRoll('#piano-roll', false);
+    pianoRoll.init();
+    
 
 
 
