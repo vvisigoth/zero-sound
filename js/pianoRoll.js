@@ -1,31 +1,30 @@
-function PianoRoll(id, square) {
-
+function PianoRoll(id, rows, cols) {
     this.id = id;
 
     this.width = $(id).width();
     this.height = $(id).height();
-    this.calData = noteData(this.width, this.height, square);
-
+    this.initNoteData(this.width, this.height, rows, cols);
 }
 
 PianoRoll.prototype.gridInit = function() {
     this.grid = d3.select(this.id)
         .append('svg')
         .attr('class', 'piano-roll');
+
 }
 
 PianoRoll.prototype.cellInit = function() {
 
     var that = this;
 
-    console.log(this.width, this.height);
-
     var row = this.grid.selectAll('.row')
-                .data(this.calData)
+                .data(this.noteData)
                 .enter().append('svg:g')
                 .attr('width', this.width)
-                .attr('height', this.height)
+                //.attr('height', this.height)
                 .attr('class', 'row');
+
+    console.log(row);
 
     var col = row.selectAll('.cell')
             .data(function(d) { return d;})
@@ -52,11 +51,14 @@ PianoRoll.prototype.cellInit = function() {
                 }
             })
             .style('stroke', '#555');
+
+    this.placePlayLine(0);
+
 }
 
 PianoRoll.prototype.refresh = function() {
     var row = this.grid.selectAll('.row')
-                .data(this.calData)
+                .data(this.noteData);
 
     var col = row.selectAll('.cell')
             .data(function(d) { return d;})
@@ -69,19 +71,23 @@ PianoRoll.prototype.refresh = function() {
                 }
             })
             .style('stroke', '#555');
+
+    this.placePlayLine(0);
 }
 
 PianoRoll.prototype.init = function() {
     this.gridInit();
+    console.log('grid initted');
     this.cellInit();
+    console.log('cell initted');
 }
 
-function noteData(gridWidth, gridHeight, square) {
+PianoRoll.prototype.initNoteData = function (width, height, rows, cols) {
     var data = new Array();
-    var gridItemWidth = gridWidth / 32;
-    var gridItemHeight = (square) ? gridItemWidth : gridHeight / 8;
-    var startX = gridItemWidth / 2;
-    var startY = gridItemHeight / 2;
+    var gridItemWidth = width / cols;
+    var gridItemHeight = (height - 10)/ rows;
+    var startX = 0;
+    var startY = 5;
     var stepX = gridItemWidth;
     var stepY = gridItemHeight;
     var xpos = startX;
@@ -95,15 +101,11 @@ function noteData(gridWidth, gridHeight, square) {
         for (var index_b = 0; index_b < 32; index_b++) {
             newValue = 0;
             data[index_a].push({
-                time: index_b,
                 value: newValue,
                 width: gridItemWidth,
                 height: gridItemHeight,
                 x: xpos,
                 y: ypos,
-                gridX: index_b,
-                gridY: index_a,
-                count: count
             });
 
             xpos += stepX;
@@ -112,8 +114,21 @@ function noteData(gridWidth, gridHeight, square) {
         xpos = startX;
         ypos += stepY;
     }
-    return data
+    this.noteData = data;
+}
+PianoRoll.prototype.placePlayLine = function(x) {
+
+    this.grid.append('svg:line')
+        .attr('x1', x)
+        .attr('y1', 0)
+        .attr('x2', x)
+        .attr('y2', this.height)
+        .attr('stroke-width', 3)
+        .attr('stroke', 'rgb(255,0,0)');
 }
 
 
+PianoRoll.prototype.play = function() {
+
+}
 
