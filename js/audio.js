@@ -1,16 +1,18 @@
 var BUFFERS = {};
+var rhythmIndex = 0;
+var loopLength = 16;
+
+var volumes = [0, 0.3, 1];
 var BUFFERS_TO_LOAD = {
     'kick': 'sound/CL516TAPE1/T09BD17IPS.wav',
     'chh': 'sound/CL516TAPE1/T09CHATD0.wav',
     'snare': 'sound/snare.mp3'
 };
 
-var rhythmIndex = 0;
-var loopLength = 16;
+var theBeat;
 
-var volumes = [0, 0.3, 1];
 
-var theBeat = {
+var beat1 = {
     "kitIndex":13,
     "effectIndex":18,
     "tempo":120,
@@ -22,9 +24,9 @@ var theBeat = {
     "tom1PitchVal":0.5,
     "tom2PitchVal":0.5,
     "tom3PitchVal":0.5,
-    "rhythm1":[2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    "rhythm1":[2,0,0,2,0,0,0,2,0,0,0,0,0,0,2,0],
     "rhythm2":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],
-    "rhythm3":[0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0],
+    "rhythm3":[0,1,0,1,0,1,1,0,0,1,0,1,0,0,1,1],
     "rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],
     "rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
     "rhythm6":[0,0,0,0,0,0,0,2,0,2,2,0,0,0,0,0]
@@ -76,6 +78,10 @@ function loadBuffers() {
 
 function RhythmSample() {};
 
+RhythmSample.prototype.loadBeat = function(beat) {
+    theBeat = beat;
+};
+
 RhythmSample.prototype.play = function() {
 
     if (!context.createGain) 
@@ -102,86 +108,87 @@ RhythmSample.prototype.play = function() {
     schedule();
 
 };
-//RhythmSample.prototype.advanceNote = function() {
+
 var advanceNote = function() {
-        // Advance time by a 16th note...
-        var secondsPerBeat = 60.0 / theBeat.tempo;
+    // Advance time by a 16th note...
+    var secondsPerBeat = 60.0 / theBeat.tempo;
 
-        rhythmIndex++;
-        if (rhythmIndex == loopLength) {
-            rhythmIndex = 0;
-        }
-
-            // apply swing    
-        if (rhythmIndex % 2) {
-            noteTime += (0.25 + kMaxSwing * theBeat.swingFactor) * secondsPerBeat;
-        } else {
-            noteTime += (0.25 - kMaxSwing * theBeat.swingFactor) * secondsPerBeat;
-        }
+    rhythmIndex++;
+    if (rhythmIndex == loopLength) {
+        rhythmIndex = 0;
     }
 
+        // apply swing    
+    if (rhythmIndex % 2) {
+        noteTime += (0.25 + kMaxSwing * theBeat.swingFactor) * secondsPerBeat;
+    } else {
+        noteTime += (0.25 - kMaxSwing * theBeat.swingFactor) * secondsPerBeat;
+    }
+}
 
-    var schedule = function() {
-            var currentTime = context.currentTime;
 
-            // the sequence starts at starttime, so normalize currentTime so RhythmSample it's 0 at the start of the sequence.
-            currentTime -= starttime;
+var schedule = function() {
+        var currentTime = context.currentTime;
 
-            while (noteTime < currentTime + 0.200) {
-                console.log('playing loop');
+        // the sequence starts at starttime, so normalize currentTime so RhythmSample it's 0 at the start of the sequence.
+        currentTime -= starttime;
+
+        while (noteTime < currentTime + 0.200) {
+            console.log('playing loop');
+            
+            // convert noteTime to context time.
+            var contextplaytime = noteTime + starttime;
+
+            
+            // kick
+            if (theBeat.rhythm1[rhythmIndex]) {
+                //playNote(currentkit.kickbuffer, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[RhythmSample.rhythmIndex]] * 1.0, kickpitch, contextplaytime);
+                console.log('kick')
+                playNote(BUFFERS.kick, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[RhythmSample.rhythmIndex]] * 1.0, 0, contextplaytime, 0.5);
                 
-                // convert noteTime to context time.
-                var contextplaytime = noteTime + starttime;
-
-                
-                // kick
-                if (theBeat.rhythm1[rhythmIndex]) {
-                    //playNote(currentkit.kickbuffer, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[RhythmSample.rhythmIndex]] * 1.0, kickpitch, contextplaytime);
-                    console.log('kick')
-                    playNote(BUFFERS.kick, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[RhythmSample.rhythmIndex]] * 1.0, 0, contextplaytime);
-                    
-                }
-
-                // snare
-                if (theBeat.rhythm2[rhythmIndex]) {
-                    //playNote(currentkit.snarebuffer, false, 0,0,-2, 1, volumes[theBeat.rhythm2[RhythmSample.rhythmIndex]] * 0.6, snarepitch, contextplaytime);
-                    console.log('snare')
-                    playNote(BUFFERS.snare, false, 0,0,-2, 1, volumes[theBeat.rhythm2[RhythmSample.rhythmIndex]] * 0.6, 0, contextplaytime);
-                }
-
-                // hihat
-                //if (theBeat.rhythm3[RhythmSample.rhythmIndex]) {
-                //    // pan the hihat according to sequence position.
-                //    playNote(currentKit.hihatBuffer, true, 0.5*RhythmSample.rhythmIndex - 4, 0, -1.0, 1, volumes[theBeat.rhythm3[RhythmSample.rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
-                //}
-
-                //// Toms    
-                //if (theBeat.rhythm4[RhythmSample.rhythmIndex]) {
-                //    playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[theBeat.rhythm4[RhythmSample.rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
-                //}
-
-                //if (theBeat.rhythm5[RhythmSample.rhythmIndex]) {
-                //    playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[theBeat.rhythm5[RhythmSample.rhythmIndex]] * 0.6, tom2Pitch, contextPlayTime);
-                //}
-
-                //if (theBeat.rhythm6[RhythmSample.rhythmIndex]) {
-                //    playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[theBeat.rhythm6[RhythmSample.rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
-                //}
-
-                //
-                //// Attempt to synchronize drawing time with sound
-                //if (noteTime != lastDrawTime) {
-                //    lastDrawTime = noteTime;
-                //    drawPlayhead((RhythmSample.rhythmIndex + 15) % 16);
-                //}
-
-                advanceNote();
             }
 
-            timeoutId = setTimeout("schedule()", 0);
+            // snare
+            if (theBeat.rhythm2[rhythmIndex]) {
+                //playNote(currentkit.snarebuffer, false, 0,0,-2, 1, volumes[theBeat.rhythm2[RhythmSample.rhythmIndex]] * 0.6, snarepitch, contextplaytime);
+                console.log('snare')
+                playNote(BUFFERS.snare, false, 0,0,-2, 1, volumes[theBeat.rhythm2[RhythmSample.rhythmIndex]] * 0.6, 0, contextplaytime, 0.5);
+            }
+
+            // hihat
+            if (theBeat.rhythm3[rhythmIndex]) {
+                // pan the hihat according to sequence position.
+                console.log('hh');
+                playNote(BUFFERS.chh, false, 0.5*RhythmSample.rhythmIndex - 4, 0, -1.0, 1, volumes[theBeat.rhythm3[RhythmSample.rhythmIndex]] * 0.7, 0, contextplaytime, 0.5);
+            }
+
+            //// Toms    
+            //if (theBeat.rhythm4[RhythmSample.rhythmIndex]) {
+            //    playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[theBeat.rhythm4[RhythmSample.rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
+            //}
+
+            //if (theBeat.rhythm5[RhythmSample.rhythmIndex]) {
+            //    playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[theBeat.rhythm5[RhythmSample.rhythmIndex]] * 0.6, tom2Pitch, contextPlayTime);
+            //}
+
+            //if (theBeat.rhythm6[RhythmSample.rhythmIndex]) {
+            //    playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[theBeat.rhythm6[RhythmSample.rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
+            //}
+
+            //
+            //// Attempt to synchronize drawing time with sound
+            //if (noteTime != lastDrawTime) {
+            //    lastDrawTime = noteTime;
+            //    drawPlayhead((RhythmSample.rhythmIndex + 15) % 16);
+            //}
+
+            advanceNote();
         }
 
-var playNote = function(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) {
+        timeoutId = setTimeout("schedule()", 0);
+    }
+
+var playNote = function(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime, length) {
         // Create the note
         console.log('playing note');
         var voice = context.createBufferSource();
@@ -213,6 +220,7 @@ var playNote = function(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, 
         //wetGainNode.connect(convolver);
 
         voice.start(noteTime);
+        if (length) voice.stop(noteTime + length);
     }
 
 
