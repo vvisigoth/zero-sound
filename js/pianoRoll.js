@@ -1,121 +1,92 @@
-function PianoRoll(id, rows, cols) {
+function PianoRoll(id, clip) {
     this.id = id;
 
     this.width = $(id).width();
     this.height = $(id).height();
-    this.initNoteData(this.width, this.height, rows, cols);
+    this.cellWidth = this.width / clip[0].length;
+    this.cellHeight = this.height / clip.length;
+    this.clip = clip;
+        
+}
+
+PianoRoll.prototype.init = function() {
+    this.gridInit();
+    this.cellInit();
 }
 
 PianoRoll.prototype.gridInit = function() {
     this.grid = d3.select(this.id)
         .append('svg')
         .attr('class', 'piano-roll');
-
 }
 
 PianoRoll.prototype.cellInit = function() {
 
     var that = this;
 
-    var row = this.grid.selectAll('.row')
-                .data(this.noteData)
+    var row = that.grid.selectAll('.row')
+                .data(this.clip)
                 .enter().append('svg:g')
-                .attr('width', this.width)
-                //.attr('height', this.height)
-                .attr('class', 'row');
+                .attr('class', 'row')
+                .attr('transform', function(d, i) { return 'translate(0,' + (i * that.cellHeight) + ')'; })
+                .each(row);
 
-    console.log(row);
+    function row(row) {
+        var cell = d3.select(this).selectAll('.cell')
+                .data(row)
+                .enter().append('svg:rect')
+                .attr('class', 'cell')
+                .attr('x', function(d, i) { return that.cellWidth * i; })
+                .attr('width', function(d) { return that.cellWidth; })
+                .attr('height', function(d) { return that.cellHeight; })
+                .on('click', function(d) {
+                    if (d.noteOn) {
+                        d.noteOn = 0;
+                        that.refresh();
+                    } else {
+                        d.noteOn = 1;
+                        that.refresh();
+                    }
+                })
+                .style('fill', function(d) {
+                    if (d.noteOn) {
+                        return '#0F0';
+                    } else {
+                        return '#FFF';
+                    }
+                })
+                .style('stroke', '#555');
+    }
 
-    var col = row.selectAll('.cell')
-            .data(function(d) { return d;})
-            .enter().append('svg:rect')
-            .attr('class', 'cell')
-            .attr('x', function(d) { return d.x; })
-            .attr('y', function(d) { return d.y; })
-            .attr('width', function(d) { return d.width; })
-            .attr('height', function(d) { return d.height; })
-            .on('click', function(e) {
-                if (e.value) {
-                    e.value = 0;
-                    that.refresh();
-                } else {
-                    e.value = 1;
-                    that.refresh();
-                }
-            })
-            .style('fill', function(d) {
-                if (d.value) {
-                    return '#0F0';
-                } else {
-                    return '#FFF';
-                }
-            })
-            .style('stroke', '#555');
-
-    this.placePlayLine(0);
+        this.placePlayLine(0);
 
 }
 
 PianoRoll.prototype.refresh = function() {
-    var row = this.grid.selectAll('.row')
-                .data(this.noteData);
 
-    var col = row.selectAll('.cell')
-            .data(function(d) { return d;})
-            .style('fill', function(d) {
-                if (d.value) {
-                    console.log('color dat');
-                    return '#0F0';
-                } else {
-                    return '#FFF';
-                }
-            })
-            .style('stroke', '#555');
+    var that = this;
+
+    var row = that.grid.selectAll('.row')
+                .data(this.clip)
+                .each(rowRefresh);
+
+    function rowRefresh(row) {
+        var cell = d3.select(this).selectAll('.cell')
+                .data(row)
+                .style('fill', function(d) {
+                    if (d.noteOn) {
+                        return '#0F0';
+                    } else {
+                        return '#FFF';
+                    }
+                })
+                .style('stroke', '#555');
+    }
 
     this.placePlayLine(0);
 }
 
-PianoRoll.prototype.init = function() {
-    this.gridInit();
-    console.log('grid initted');
-    this.cellInit();
-    console.log('cell initted');
-}
 
-PianoRoll.prototype.initNoteData = function (width, height, rows, cols) {
-    var data = new Array();
-    var gridItemWidth = width / cols;
-    var gridItemHeight = (height - 10)/ rows;
-    var startX = 0;
-    var startY = 5;
-    var stepX = gridItemWidth;
-    var stepY = gridItemHeight;
-    var xpos = startX;
-    var ypos = startY;
-    var newValue = 0;
-    var count = 0;
-
-    for (var index_a = 0;
-            index_a < 8; index_a++) {
-        data.push(new Array());
-        for (var index_b = 0; index_b < 32; index_b++) {
-            newValue = 0;
-            data[index_a].push({
-                value: newValue,
-                width: gridItemWidth,
-                height: gridItemHeight,
-                x: xpos,
-                y: ypos,
-            });
-
-            xpos += stepX;
-            count += 1;
-        }
-        xpos = startX;
-        ypos += stepY;
-    }
-    this.noteData = data;
-}
 PianoRoll.prototype.placePlayLine = function(x) {
 
     this.grid.append('svg:line')
@@ -125,10 +96,5 @@ PianoRoll.prototype.placePlayLine = function(x) {
         .attr('y2', this.height)
         .attr('stroke-width', 3)
         .attr('stroke', 'rgb(255,0,0)');
-}
-
-
-PianoRoll.prototype.play = function() {
-
 }
 
