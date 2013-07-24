@@ -5,6 +5,7 @@ Zero is a DAW built for Google Chrome.
 
 *TODO*
 
+- Dynamic beat changes
 - Angular Architecture
 - keyboard input
 - stop button shuts down sound immmediately
