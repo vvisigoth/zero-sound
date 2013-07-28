@@ -1,14 +1,17 @@
-function Clip(matrix) {
+function Clip(obj) {
+    // Turns an object into a Clip
 
     var mtx = []
 
-    for (var i = 0; i < matrix.length; i ++) {
-        mtx.push(matrix[i].map(function(x) { 
+    for (var i = 0; i < obj.rhythm.length; i ++) {
+        mtx.push(obj.rhythm[i].map(function(x) { 
             return { 'noteOn': x }
         })
         );
     }
 
-    return mtx;
+    obj.rhythm = mtx;
+
+    return obj
 
 }

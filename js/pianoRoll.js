@@ -3,8 +3,8 @@ function PianoRoll(id, clip) {
 
     this.width = $(id).width();
     this.height = $(id).height();
-    this.cellWidth = this.width / clip[0].length;
-    this.cellHeight = this.height / clip.length;
+    this.cellWidth = this.width / clip.rhythm[0].length;
+    this.cellHeight = this.height / clip.rhythm.length;
     this.clip = clip;
         
 }
@@ -18,6 +18,7 @@ PianoRoll.prototype.gridInit = function() {
     this.grid = d3.select(this.id)
         .append('svg')
         .attr('class', 'piano-roll');
+
 }
 
 PianoRoll.prototype.cellInit = function() {
@@ -25,7 +26,7 @@ PianoRoll.prototype.cellInit = function() {
     var that = this;
 
     var row = that.grid.selectAll('.row')
-                .data(this.clip)
+                .data(this.clip.rhythm)
                 .enter().append('svg:g')
                 .attr('class', 'row')
                 .attr('transform', function(d, i) { return 'translate(0,' + (i * that.cellHeight) + ')'; })
@@ -57,6 +58,15 @@ PianoRoll.prototype.cellInit = function() {
                 })
                 .style('stroke', '#555');
     }
+        for (var g = 0; g < this.width; g += (4 * this.cellWidth)) {
+            this.grid.append('svg:line')
+                .attr('x1', g)
+                .attr('y1', 0)
+                .attr('x2', g)
+                .attr('y2', this.height)
+                .attr('stroke-width', 3)
+                .attr('stroke', '#000');
+        }
 
         this.placePlayLine(0);
 
@@ -67,7 +77,7 @@ PianoRoll.prototype.refresh = function() {
     var that = this;
 
     var row = that.grid.selectAll('.row')
-                .data(this.clip)
+                .data(this.clip.rhythm)
                 .each(rowRefresh);
 
     function rowRefresh(row) {
