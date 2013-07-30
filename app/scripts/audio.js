@@ -1,36 +1,18 @@
 var BUFFERS = {};
-var rhythmIndex = 0;
-var loopLength = 16;
-
-var volumes = [0, 0.3, 1];
 var BUFFERS_TO_LOAD = {
     'kick': 'sound/CL516TAPE1/T09BD17IPS.wav',
     'chh': 'sound/CL516TAPE1/T09CHATD0.wav',
     'snare': 'sound/snare.mp3'
 };
 
-var theBeat;
+var rhythmIndex = 0;
+var loopLength = 16;
+var effectDryMix = 1;
+var kMaxSwing = .08;
 
+var volumes = [0, 0.3, 1];
 
-var beat1 = {
-    "kitIndex":13,
-    "effectIndex":18,
-    "tempo":120,
-    "swingFactor":0,
-    "effectMix":0.19718309859154926,
-    "kickPitchVal":0.5,
-    "snarePitchVal":0.5,
-    "hihatPitchVal":0.5,
-    "tom1PitchVal":0.5,
-    "tom2PitchVal":0.5,
-    "tom3PitchVal":0.5,
-    "rhythm1":[2,0,0,2,0,0,0,2,0,0,0,0,0,0,2,0],
-    "rhythm2":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],
-    "rhythm3":[0,1,0,1,0,1,1,0,0,1,0,1,0,0,1,1],
-    "rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],
-    "rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    "rhythm6":[0,0,0,0,0,0,0,2,0,2,2,0,0,0,0,0]
-};
+var theBeat, timeoutId;
 
 var kick = BUFFERS.kick;
 var kickLength = 0.5;
@@ -52,11 +34,8 @@ function init() {
 
 }
 
-var effectDryMix = 1;
 
-var timeoutId;
 
-var kMaxSwing = .08;
 
 function loadBuffers() {
     var names = [];
@@ -109,6 +88,10 @@ RhythmSample.prototype.play = function() {
 
 };
 
+RhythmSample.prototype.stop = function() {
+    clearInterval(timeoutId); 
+}
+
 var advanceNote = function() {
     // Advance time by a 16th note...
     var secondsPerBeat = 60.0 / theBeat.tempo;
@@ -139,27 +122,29 @@ var schedule = function() {
             // convert noteTime to context time.
             var contextplaytime = noteTime + starttime;
 
+
+            //TODO you know there's a way to do this with a for loop
             
             // kick
-            if (theBeat.rhythm1[rhythmIndex]) {
+            if (theBeat.rhythm[0][rhythmIndex].noteOn) {
                 //playNote(currentkit.kickbuffer, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[RhythmSample.rhythmIndex]] * 1.0, kickpitch, contextplaytime);
                 console.log('kick')
-                playNote(BUFFERS.kick, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[RhythmSample.rhythmIndex]] * 1.0, 0, contextplaytime, 0.5);
+                playNote(BUFFERS.kick, false, 0,0,-2, 0.5, volumes[theBeat.rhythm[0][RhythmSample.rhythmIndex]] * 1.0, 0, contextplaytime, 0.5);
                 
             }
 
             // snare
-            if (theBeat.rhythm2[rhythmIndex]) {
+            if (theBeat.rhythm[1][rhythmIndex].noteOn) {
                 //playNote(currentkit.snarebuffer, false, 0,0,-2, 1, volumes[theBeat.rhythm2[RhythmSample.rhythmIndex]] * 0.6, snarepitch, contextplaytime);
                 console.log('snare')
-                playNote(BUFFERS.snare, false, 0,0,-2, 1, volumes[theBeat.rhythm2[RhythmSample.rhythmIndex]] * 0.6, 0, contextplaytime, 0.5);
+                playNote(BUFFERS.snare, false, 0,0,-2, 1, volumes[theBeat.rhythm[1][RhythmSample.rhythmIndex]] * 0.6, 0, contextplaytime, 0.5);
             }
 
             // hihat
-            if (theBeat.rhythm3[rhythmIndex]) {
+            if (theBeat.rhythm[2][rhythmIndex].noteOn) {
                 // pan the hihat according to sequence position.
                 console.log('hh');
-                playNote(BUFFERS.chh, false, 0.5*RhythmSample.rhythmIndex - 4, 0, -1.0, 1, volumes[theBeat.rhythm3[RhythmSample.rhythmIndex]] * 0.7, 0, contextplaytime, 0.5);
+                playNote(BUFFERS.chh, false, 0.5*RhythmSample.rhythmIndex - 4, 0, -1.0, 1, volumes[theBeat.rhythm[2][RhythmSample.rhythmIndex]] * 0.7, 0, contextplaytime, 0.5);
             }
 
             //// Toms    
