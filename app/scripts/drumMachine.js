@@ -27,13 +27,7 @@ function init() {
     catch(e) {
         alert('Web Audio API not supported');
     }
-
-    loadBuffers();
-
 }
-
-
-
 
 function loadBuffers() {
     var names = [];
@@ -57,6 +51,9 @@ function DrumMachine() {};
 
 DrumMachine.prototype.loadBeat = function(beat) {
     theBeat = beat;
+
+    loadBuffers();
+
 };
 
 DrumMachine.prototype.play = function() {

@@ -89,7 +89,6 @@ angular.module('zeroSoundApp')
                         .selectAll('.cell')
                         .data(row)
                         .attr('class', function(d) {
-                            console.log(d.noteOn);
 
                             return 'cell note-on-' + d.noteOn;
                         });
@@ -100,6 +99,8 @@ angular.module('zeroSoundApp')
             }
 
             scope.init();
+
+
             }
         }
     });
