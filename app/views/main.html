@@ -1,1 +1,7 @@
-<piano-roll class="piano-roll" val="clip"></piano-roll>
+<div piano-roll class="piano-roll" val="clip"></div>
+<div ng-ctrl="mainCtrl" class="piano-roll-transport"> 
+    <span class="fui-arrow-left transport-button"></span>
+    <span class="piano-roll-play fui-play transport-button" ng-click="drumMachine.play()"></span>
+    <span class="piano-roll-stop fui-pause transport-button" ng-click="drumMachine.stop()"></span>
+    <span class="fui-arrow-right transport-button"></span>
+</div>

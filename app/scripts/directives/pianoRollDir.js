@@ -1,23 +1,24 @@
-
 'use strict';
 
 angular.module('zeroSoundApp')
     .directive('pianoRoll', function() {
         return {
-            restrict: 'E',
+            restrict: 'A',
             scope: {
                 val: '='
             }, 
             link: function(scope, element, attrs) {
                 var $tmp, offsetX, offsetY;
-                var width = 900;
-                var height = 400;
+                var margin = 10;
+                var width = $(element[0]).width() - margin;
+                var height = $(element[0]).height() - margin;
                 var cellWidth = width / scope.val.rhythm[0].length;
                 var cellHeight = height / scope.val.rhythm.length;
 
                 var grid = d3.select(element[0])
                     .append('svg')
                     .attr('class', 'piano-roll');
+
                 scope.init = function () {
 
                     var row = grid.selectAll('.row')
@@ -35,7 +36,6 @@ angular.module('zeroSoundApp')
                             .selectAll('.cell')
                             .data(row)
                             .enter().append('svg:rect')
-                            .attr('class', 'cell')
                             .attr('x', function(d, i) {
                                 return cellWidth * i; 
                             })

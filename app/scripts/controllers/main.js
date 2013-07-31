@@ -25,4 +25,10 @@ angular.module('zeroSoundApp')
             [0,0,0,0,0,0,0,2,0,2,2,0,0,0,0,0]
         ]
     });
+    init();
+    $scope.drumMachine = new DrumMachine();
+    $scope.drumMachine.loadBeat($scope.clip);
+    $scope.clicked = function() {
+        console.log('test function clicked');
+    };
   });
