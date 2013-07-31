@@ -1,4 +1,4 @@
-var BUFFERS = [];
+
 var BUFFERS_TO_LOAD = {
     'kick': '../sound/BD1.wav',
     'hh1': '../sound/HH1.wav',
@@ -9,7 +9,7 @@ var BUFFERS_TO_LOAD = {
     'tom1': '../sound/TOM2.wav',
     'crash': '../sound/CRASH1.wav'
 };
-
+var BUFFERS = [];
 var rhythmIndex = 0;
 var loopLength = 16;
 var effectDryMix = 1;

@@ -9,7 +9,7 @@ angular.module('zeroSoundApp')
             }, 
             link: function(scope, element, attrs) {
                 var $tmp, offsetX, offsetY;
-                var margin = 10;
+                var margin = 80;
                 var width = $(element[0]).width() - margin;
                 var height = $(element[0]).height() - margin;
                 var cellWidth = width / scope.val.rhythm[0].length;
@@ -37,7 +37,7 @@ angular.module('zeroSoundApp')
                             .data(row)
                             .enter().append('svg:rect')
                             .attr('x', function(d, i) {
-                                return cellWidth * i; 
+                                return cellWidth * i + margin; 
                             })
                             .attr('width', function(d) {
                                 return cellWidth;
@@ -59,6 +59,24 @@ angular.module('zeroSoundApp')
                             });
 
                     }
+
+                    var buff_names = []
+                    for (var name in BUFFERS_TO_LOAD) {
+                        buff_names.push(name);
+                    };
+
+                    row.append('text')
+                        .attr('x', 0)
+                        .attr('y', -20)
+                        .attr('dy', '40px')
+                        .attr('text-anchor', 'start')
+                        .text(function(d, i) {
+                            return buff_names[i]
+                        });
+
+
+
+
             },
 
             scope.refresh = function() { 
