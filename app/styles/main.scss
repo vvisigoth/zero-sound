@@ -1,19 +1,65 @@
 @import "bootstrap-sass/lib/bootstrap";
 
+$background: #fafafa;
+$note-on: steelblue;
+$note-on-1: lighten(steelblue, 25%);
+$note-on-2: lighten(steelblue, 15%);
+$note-on-3: lighten(steelblue, 5%);
+$darkerBackground: darken($background, 5%);
+$darkestBackground: darken($background, 70%);
+
 /* Put your CSS here */
 html, body {
   margin: 20px;
 }
 
 body {
-    background: #fafafa;
+    background: $darkerBackground;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
+}
+
+
+.cell {
+    stroke: #fff;
+    stroke-width: 2px;
+}
+
+.note-on-1 {
+    fill: $note-on-1;
+}
+
+.note-on-2 {
+    fill: $note-on-2;
+}
+
+.note-on-3 {
+    fill: $note-on-3;
+}
+
+.note-on-0 {
+    fill: $darkerBackground;
 }
 
 .piano-roll {
     width: 900px;
     height: 400px;
+}
+
+.piano-roll-transport {
+    color: $darkerBackground;
+}
+
+.transport-button{
+    width: 23.5%;
+    margin: 0;
+    padding: 0;
+    background-color: $darkestBackground;
+    text-align: center;
+}
+
+.tranport-button:hover {
+    cursor: pointer;
 }
 
 .hero-unit {

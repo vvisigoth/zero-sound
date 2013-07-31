@@ -46,24 +46,17 @@ angular.module('zeroSoundApp')
                                 return cellHeight;
                             })
                             .on('click', function(d) {
-                                if (d.noteOn) {
-                                    d.noteOn = 0;
-                                    scope.refresh();
+                                if (d.noteOn < 3) {
+                                    d.noteOn ++
+                                    console.log(d.noteOn);
                                 } else {
-                                    d.noteOn = 1;
-                                    scope.refresh();
-
+                                    d.noteOn = 0
                                 }
+                                scope.refresh();
                             })
-                            .style('fill', function(d) {
-                                if (d.noteOn) {
-                                    return '#0F0'
-
-                                } else {
-                                    return '#FFF'
-                                }
-                            })
-                            .style('stroke', '#555');
+                            .attr('class', function(d) {
+                                return 'cell note-on-' + d.noteOn;
+                            });
 
                     }
             },
@@ -74,25 +67,21 @@ angular.module('zeroSoundApp')
                     .each(rowRefresh);
 
                 function rowRefresh(row) {
-                    console.log(this);
                     var cell = d3.select(this)
                         .selectAll('.cell')
                         .data(row)
-                        .style('fill', function(d) {
-                            if (d.noteOn) {
-                                return '#0F0';
-                            } else {
-                                return '#FFF';
-                            }
-                        })
-                        .style('stroke', '#555');
+                        .attr('class', function(d) {
+                            console.log(d.noteOn);
+
+                            return 'cell note-on-' + d.noteOn;
+                        });
                 }
 
 
 
             }
 
-                scope.init();
+            scope.init();
             }
         }
     });
