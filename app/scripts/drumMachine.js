@@ -4,10 +4,14 @@ var BUFFERS_TO_LOAD = {
     'hh1': '../sound/HH1.wav',
     'hh2': '../sound/HH2.wav',
     'clap': '../sound/CLAP1.wav',
-    'snare': '../sound/snare.mp3',
-    'tom2': '../sound/TOM1.wav',
-    'tom1': '../sound/TOM2.wav',
-    'crash': '../sound/CRASH1.wav'
+    'kick2': '../sound/BD1.wav',
+    'hh12': '../sound/HH1.wav',
+    'hh22': '../sound/HH2.wav',
+    'clap2': '../sound/CLAP1.wav'
+    //'tom2': '../sound/TOM1.wav',
+    //'tom1': '../sound/TOM2.wav',
+    //'crash': '../sound/CRASH1.wav',
+    //'snare': '../sound/snare.mp3',
 };
 var BUFFERS = [];
 var rhythmIndex = 0;
