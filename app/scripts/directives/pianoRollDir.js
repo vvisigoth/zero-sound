@@ -11,9 +11,10 @@ angular.module('zeroSoundApp')
                 var $tmp, offsetX, offsetY;
                 var margin = 80;
                 var width = $(element[0]).width() - margin;
-                var height = $(element[0]).height() - margin;
+                var height = $(element[0]).height();
                 var cellWidth = width / scope.val.rhythm[0].length;
                 var cellHeight = height / scope.val.rhythm.length;
+                console.log(cellHeight);
 
                 var grid = d3.select(element[0])
                     .append('svg')
