@@ -28,4 +28,5 @@ angular.module('zeroSoundApp')
     init();
     $scope.drumMachine = new DrumMachine();
     $scope.drumMachine.loadBeat($scope.clip);
+    $scope.clip.tempo = 100;
   });
