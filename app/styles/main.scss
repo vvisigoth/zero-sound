@@ -8,9 +8,16 @@ $note-on-3: lighten(steelblue, 5%);
 $darkerBackground: darken($background, 5%);
 $darkestBackground: darken($background, 70%);
 
+//$ZEROCOLOR1: #000000;
+$ZEROCOLOR1: darken(steelblue, 25%);
+$ZEROCOLOR2: lighten($ZEROCOLOR1, 25%);
+$ZEROCOLOR3: lighten($ZEROCOLOR2, 25%);
+$ZEROCOLOR4: lighten($ZEROCOLOR3, 25%);
+$OUTLINE: 1px solid white;
 /* Put your CSS here */
 html, body {
-  margin: 20px;
+  margin: 0px;
+  height: 100%;
 }
 
 body {
@@ -66,12 +73,50 @@ a {
 }
 // ZERO BODY //
 
-#zero-container {
+.zero-container {
     width: 100%;
+    height: 100%;
+    margin: 0;
 }
 
 .zero-test {
     background-color: red;
+}
+
+#master-transport {
+    width: 100%;
+    height: 5%;
+    background-color: $ZEROCOLOR1;
+}
+
+#zero-lane-container {
+    height: 100%;
+    width: 80%;
+    margin:0;
+    float: left;
+}
+
+.zero-lane {
+    //height: 200px;
+    height: 30%;
+    width: 100%;
+    //outline: $OUTLINE;
+    background-color: $ZEROCOLOR2;
+}
+
+#zero-browser {
+    width: 20%;
+    height: 90%;
+    background-color: $ZEROCOLOR3;
+    float: right;
+}
+
+#zero-footer {
+    width: 100%;
+    height: 5%;
+    position: absolute;
+    background-color: $ZEROCOLOR1;
+    bottom: 0;
 }
 
 // DRUM MACHINE //
