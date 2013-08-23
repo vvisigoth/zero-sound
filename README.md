@@ -1,17 +1,18 @@
-zero-sound
+ZERO
 ==========
 
 Zero is a DAW built for Google Chrome.
 
 *TODO*
 
-- Dynamic beat changes
-- Angular Architecture
+-CSS Drum Machine
+-CSS Piano Roll
+-Drag from Browser into lane
+-DrumMachine.js into DrumMachineDir
+-No (limited) MainCtrl
+-Arrangment dir
+-Play Line
 - keyboard input
-- stop button shuts down sound immmediately
 - Modular FX
-- Scheduled sample playback
-- Sound menu
-- Piano Roll
-- Layout Sketch
+- Sound menu (?)
 

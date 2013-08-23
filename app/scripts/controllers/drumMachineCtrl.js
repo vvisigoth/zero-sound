@@ -6,7 +6,6 @@ angular.module('zeroSoundApp')
         $scope.drums = [];
         $scope.paths = [];
         for (var name in BUFFERS_TO_LOAD) {
-            //temp.push('<div class="wave-viewport" id="drum-' + name + '"></div>');
             $scope.drums.push(name);
             $scope.paths.push(BUFFERS_TO_LOAD[name]);
 

@@ -7,6 +7,7 @@ $note-on-2: lighten(steelblue, 15%);
 $note-on-3: lighten(steelblue, 5%);
 $darkerBackground: darken($background, 5%);
 $darkestBackground: darken($background, 70%);
+$DEVICEOUTLINE: lighten($darkestBackground, 25%);
 
 //$ZEROCOLOR1: #000000;
 $ZEROCOLOR1: darken(steelblue, 25%);
@@ -29,6 +30,8 @@ body {
 a {
     text-decoration: none;
 }
+
+// PIANO ROLL //
 
 .cell {
     stroke: #fff;
@@ -53,7 +56,7 @@ a {
 
 .piano-roll {
     width: 900px;
-    height: 400px;
+    height: 100%;
 }
 
 .piano-roll-transport {
@@ -71,6 +74,7 @@ a {
 .tranport-button:hover {
     cursor: pointer;
 }
+
 // ZERO BODY //
 
 .zero-container {
@@ -101,7 +105,7 @@ a {
     height: 30%;
     width: 100%;
     //outline: $OUTLINE;
-    background-color: $ZEROCOLOR2;
+    //background-color: $ZEROCOLOR2;
 }
 
 #zero-browser {
@@ -119,24 +123,71 @@ a {
     bottom: 0;
 }
 
+// DEVICE STUFF //
+
+.device-label {
+    height: 2em;
+    border-bottom: 1px solid $DEVICEOUTLINE;
+}
+
+.device-label-floater {
+    float: left;
+    height: 50%;
+    margin-bottom: -0.5em;
+}
+
+.device-label-inner {
+    clear: both;
+    height: 1em;
+    position: relative;
+    margin-left: 0.5em;
+}
+
+.device-upper-inner {
+    height: 60%;
+}
+
+.device-lower-inner {
+    height: 40%;
+    //border-top: 1px solid $DEVICEOUTLINE;
+}
+
 // DRUM MACHINE //
 
 .drum-machine-nav {
     width: 100px;
     float: left;
+    height: 100%;
+}
+
+.drum-machine-nav > a {
+    margin-left: 0.5em;
+}
+
+.drum-machine-nav > li {
+    height: 12%;
+}
+
+.drum-machine {
+    width: 900px;
+    height: 90%;
+    margin: 0;
 }
 
 .drum-machine-container {
     width: 900px;
-    height: 300px;
-    margin-bottom: 20px;
+    height: 90%;
+    margin: 0;
+    border: 1px solid $DEVICEOUTLINE;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
 }
 
 .wave-viewport {
     width: 800px;
-    height: 300px;
+    height: 100%;
     float: right;
-
 }
 
 

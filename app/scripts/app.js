@@ -9,6 +9,7 @@ angular.module('zeroSoundApp', [])
       })
       .when('/layout', {
         templateUrl: 'views/layout.html',
+        controller: 'mainCtrl'
       })
       .otherwise({
         redirectTo: '/'
