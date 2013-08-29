@@ -15,6 +15,10 @@ $ZEROCOLOR2: lighten($ZEROCOLOR1, 25%);
 $ZEROCOLOR3: lighten($ZEROCOLOR2, 25%);
 $ZEROCOLOR4: lighten($ZEROCOLOR3, 25%);
 $OUTLINE: 1px solid white;
+
+$FUSCHIA: rgb(255, 0, 128);
+$BLUE1: rgb(38, 50, 71);
+$BACK: rgb(224, 227, 231);
 /* Put your CSS here */
 html, body {
   margin: 0px;
@@ -150,6 +154,17 @@ a {
 .device-lower-inner {
     height: 40%;
     //border-top: 1px solid $DEVICEOUTLINE;
+}
+
+.device-knob {
+    width: 65px;
+    height: 100px;
+}
+
+.knob path {
+    fill: none;
+    stroke: $BLUE1;
+    stroke-width: 2em;
 }
 
 // DRUM MACHINE //
