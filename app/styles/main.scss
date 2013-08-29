@@ -159,12 +159,29 @@ a {
 .device-knob {
     width: 65px;
     height: 100px;
+    float: left;
+    cursor: pointer;
+    text-align: center;
+}
+
+.device-knob svg {
+    width: 65px;
+    height: 65px;
 }
 
 .knob path {
     fill: none;
-    stroke: $BLUE1;
     stroke-width: 2em;
+}
+
+.knob-label {
+}
+
+.knob .knob-main {
+    stroke: $BLUE1;
+}
+.knob .knob-background {
+    stroke: lighten($BLUE1, 50%);
 }
 
 // DRUM MACHINE //
