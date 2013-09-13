@@ -5,9 +5,11 @@ angular.module('zeroSoundApp')
         return {
             restrict: 'A',
             templateUrl: 'views/knob.html', 
-            scope: {
-            },
-            link: function(scope, element, attrs) {
+            scope: {},
+            // modularize so that you can put in any device
+            require: '^drumMachine',
+            link: function(scope, element, attrs, drumMachine) {
+                drumMachine.test();
 
                 // Set up
                 var path = $(element).find('.knob-main')[0];
@@ -28,6 +30,7 @@ angular.module('zeroSoundApp')
                 if (attrs.max) {
                     var max = attrs.max;
                 }
+
                 else {
                     var max = 1;
                 }

@@ -17,6 +17,14 @@ angular.module('zeroSoundApp')
             templateUrl: 'views/drummachine.html',
             //template: template,
             scope: {},
+            controller: function($scope, $element, $attrs) {
+                this.test = function () {
+                    console.log('this test works!');
+                    $($element).find('.device-label-inner').text('HOLY SHIT');
+                    $scope.drummer = "JAMS";
+                    console.log($scope);
+                }
+            },
             link: function(scope, element, attrs) {
                 scope.waveForms = [];
                 for (var i = 0; i < names.length; i ++) {
